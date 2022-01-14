@@ -95,7 +95,7 @@ public class User {
                 // addExpense();
                 break;
             case 2:
-                //addPartner();
+                addPartner(user_index);
                 break;
             case 3:
                 //viewOrRepay();
@@ -118,6 +118,26 @@ public class User {
     }
 
     
+    private static void addPartner(int user_index) {
+        System.out.print("\033[H\033[2J");
+        System.out.print("Enter new Partner Name or 0 to exit : ");
+        String name = Main.sc.nextLine();
+        System.out.print("Enter username of Partner : ");
+        String userName = Main.sc.nextLine();
+        System.out.print("Enter Mobile number of  : ");
+        String mobile = Main.sc.nextLine();
+        Main.users.add(new User(name, userName, "1234", mobile));
+        System.out.printf(" =>> %s has been added as a Partner\n",name);
+        System.out.println("Password is 1234");
+        System.out.println();
+        System.out.print("Enter 1 to add one more Partner or 0 to Exit : ");
+        int n = Integer.parseInt(Main.sc.nextLine());
+        if(n==1){
+            addPartner(user_index);
+        }
+        userPage(user_index);
+    }
+
     private static void addMoney(int user_index) {
         System.out.print("\033[H\033[2J");
         System.out.println("Current Amount in Wallet => "+Main.users.get(user_index).walletAmount);
