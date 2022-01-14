@@ -87,7 +87,8 @@ public class User {
         System.out.println("    -> Enter 3 to view/Repay Expense");
         System.out.println("    -> Enter 4 to view All your Transactions");
         System.out.println("    -> Enter 5 to View/Add money to Wallet");
-        System.out.println("    -> Enter 6 to Logout");
+        System.out.println("    -> Enter 6 to Change Password");
+        System.out.println("    -> Enter 7 to Logout");
         System.out.print("Enter Choice : ");
         int n = Integer.parseInt(Main.sc.nextLine());
         switch(n){
@@ -107,6 +108,9 @@ public class User {
                 addMoney(user_index);
                 break;
             case 6:
+                changePassword(user_index);
+                break;
+            case 7:
                 login();
                 break;
             default:
@@ -118,6 +122,29 @@ public class User {
     }
 
     
+    private static void changePassword(int user_index) {
+        System.out.print("\033[H\033[2J");
+        System.out.print("Enter old Password or 0 to exit : ");
+        String oldPass = Main.sc.nextLine();
+        if(oldPass.equals("0")){
+            userPage(user_index);
+        }
+        if(Main.users.get(user_index).password.equals(oldPass)){
+            System.out.print("Enter new Password : ");
+            Main.users.get(user_index).password=Main.sc.nextLine();
+            System.out.println("Your Password has been Upated\nYou have been logged out");
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            login();
+        }
+        else{
+            System.out.println("Enter your Old Password Correctly");
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            changePassword(user_index);
+        }
+    }
+
     private static void addPartner(int user_index) {
         System.out.print("\033[H\033[2J");
         System.out.print("Enter new Partner Name or 0 to exit : ");
