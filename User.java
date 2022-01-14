@@ -86,7 +86,7 @@ public class User {
         System.out.println("    -> Enter 2 to add a Partner");
         System.out.println("    -> Enter 3 to view/Repay Expense");
         System.out.println("    -> Enter 4 to view All your Transactions");
-        System.out.println("    -> Enter 5 to Add money to Wallet");
+        System.out.println("    -> Enter 5 to View/Add money to Wallet");
         System.out.println("    -> Enter 6 to Logout");
         System.out.print("Enter Choice : ");
         int n = Integer.parseInt(Main.sc.nextLine());
@@ -104,7 +104,7 @@ public class User {
                 //viewTransactions();
                 break;
             case 5:
-                //addMoney(user_index);
+                addMoney(user_index);
                 break;
             case 6:
                 login();
@@ -117,5 +117,21 @@ public class User {
         }
     }
 
-    
+    private static void addMoney(int user_index) {
+        System.out.print("\033[H\033[2J");
+        System.out.println("Current Amount in Wallet => "+Main.users.get(user_index).walletAmount);
+        System.out.print("Enter amount you Want to add in your Wallet or 0 to exit : ");
+        Integer amt = Integer.parseInt(Main.sc.nextLine());
+        if(amt==0){
+            userPage(user_index);
+        }
+        Main.users.get(user_index).walletAmount+=amt;
+        String det = String.format("Amount %d has been added to your wallet\n\n",amt);
+        System.out.println(det);
+        Main.users.get(user_index).pays+=det;
+        System.out.println("Your Updated Balance => "+Main.users.get(user_index).walletAmount);
+        System.out.println("Press any key to continue......");
+        Main.sc.nextLine();
+        userPage(user_index);
+    }
 }
