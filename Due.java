@@ -1,16 +1,16 @@
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Due {
     String Name;
     String details;
     Integer amount;
-    LocalDate date;
-    
-    public Due(String name, String details, Integer amount, LocalDate date) {
+    LocalDateTime dateTime;
+
+    public Due(String name, String details, Integer amount, LocalDateTime dateTime) {
         Name = name;
         this.details = details;
         this.amount = amount;
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
     
