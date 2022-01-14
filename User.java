@@ -35,8 +35,11 @@ public class User {
             Main.sc.nextLine();
             login();
         }
-        System.out.print("Enter Password : ");
+        System.out.print("Enter Password or 0 to Forgot Password : ");
         String password = Main.sc.nextLine();
+        if(password.equals("0")){
+            forgetPassword(user_index);
+        }
         if(Main.users.get(user_index).password.equals(password)){
             System.out.println("welcome");
         }
@@ -45,6 +48,37 @@ public class User {
             System.out.println("Press any key to continue......");
             Main.sc.nextLine();
             login();
+        }
+    }
+
+    private static void forgetPassword(int user_index) {
+        System.out.print("\033[H\033[2J");
+        System.out.print("Enter Your Mobile number or 0 to Exit : ");
+        String mobile = Main.sc.nextLine();
+        if(mobile.equals("0")){
+            login();
+        }
+        if(Main.users.get(user_index).mobile.equals(mobile)){
+            System.out.print("Enter OTP : ");
+            String otp = Main.sc.nextLine();
+            if(otp.equals("123456")){
+                System.out.println("Your Password is => "+Main.users.get(user_index).password);
+                System.out.println("Press any key to continue......");
+                Main.sc.nextLine();
+                login();
+            }
+            else{
+                System.out.println("Wrong OTP !\nTry again");
+                System.out.println("Press any key to continue......");
+                Main.sc.nextLine();
+                forgetPassword(user_index);
+            }
+        }
+        else{
+            System.out.println("Entered Mobile number Doesn't match");
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            forgetPassword(user_index);
         }
     }
 
