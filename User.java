@@ -3,7 +3,7 @@ public class User {
     String userName;
     String password;
     String mobile;
-    String pays;
+    String pays="";
     Integer walletAmount=0;
     Due due;
 
@@ -101,7 +101,7 @@ public class User {
                 //viewOrRepay();
                 break;
             case 4:
-                //viewTransactions();
+                viewTransactions(user_index);
                 break;
             case 5:
                 addMoney(user_index);
@@ -117,6 +117,7 @@ public class User {
         }
     }
 
+    
     private static void addMoney(int user_index) {
         System.out.print("\033[H\033[2J");
         System.out.println("Current Amount in Wallet => "+Main.users.get(user_index).walletAmount);
@@ -126,12 +127,30 @@ public class User {
             userPage(user_index);
         }
         Main.users.get(user_index).walletAmount+=amt;
-        String det = String.format("Amount %d has been added to your wallet\n\n",amt);
-        System.out.println(det);
+        String det = String.format(" => Amount Rs.%d has been added to your wallet\n",amt);
+        System.out.print(det);
         Main.users.get(user_index).pays+=det;
         System.out.println("Your Updated Balance => "+Main.users.get(user_index).walletAmount);
         System.out.println("Press any key to continue......");
         Main.sc.nextLine();
         userPage(user_index);
+    }
+
+    private static void viewTransactions(int user_index) {
+        if(Main.users.get(user_index).pays.equals("")){
+            System.out.println("You haven't Done any transactions Yet !");
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            userPage(user_index);
+        }
+        else{
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.print(Main.users.get(user_index).pays);
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.println();
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            userPage(user_index);
+        }
     }
 }
