@@ -135,7 +135,7 @@ public class User {
         System.out.print("\033[H\033[2J");
         System.out.println("-------Pending Dues--------");
         for (int i = 0; i < Main.users.get(user_index).dues.size(); i++) {
-            System.out.println("Due "+(i+1));
+            System.out.println("Due " + (i + 1));
             System.out.println();
             System.out.println("-> Name of the Expense : " + Main.users.get(user_index).dues.get(i).Name);
 
@@ -148,12 +148,60 @@ public class User {
                     Main.users.get(user_index).dues.get(i).dateTime.getHour(),
                     Main.users.get(user_index).dues.get(i).dateTime.getMinute());
             System.out.println("-> Date of the Expense : " + dateAndTime);
-            System.out.println("Due Posted By : "+Main.users.get(user_index).dues.get(i).duedBy.Name);
-            System.out.println("Due Amount :"+Main.users.get(user_index).dues.get(i).amount);
+            System.out.println("Due Posted By : " + Main.users.get(user_index).dues.get(i).duedBy.Name);
+            System.out.println("Due Amount :" + Main.users.get(user_index).dues.get(i).amount);
         }
-        System.out.println("Press any key to continue......");
-        Main.sc.nextLine();
-        userPage(user_index);
+        System.out.println("=============================================================================");
+        System.out.println("Press 1 to Repay your Dues");
+        System.out.println("Press any other key to Redirect to user page");
+        String choice = Main.sc.nextLine();
+        if (choice.equals("1")) {
+            repay(user_index);
+        } else {
+            userPage(user_index);
+
+        }
+    }
+
+    private static void repay(int user_index) {
+        System.out.println("------Repayment Portal-------");
+        System.out.println("Enter Due numbers Seperated by a Space or 0 to Exit ");
+        String s = Main.sc.nextLine();
+        if (s.equals("0")) {
+            userPage(user_index);
+        } else {
+            String[] cms = s.split(" ");
+            int i = 0;
+            for (i = 0; i < cms.length; i++) {
+                int tp = (Integer.parseInt(cms[i]) - 1);
+                if (pay(user_index, tp)) {
+                    continue;
+                } else {
+                    System.out.println("Insufficient Wallet Amount\nAdd Amount in your Wallet to Repay");
+                    System.out.println("Press any key to continue......");
+                    Main.sc.nextLine();
+                    userPage(user_index);
+                }
+            }
+            for (int j = 0; j < i; j++) {
+                Main.users.get(user_index).dues.remove(0);
+            }
+
+        }
+    }
+
+    private static boolean pay(int user_index, int payind) {
+        if (Main.users.get(user_index).walletAmount >= Main.users.get(user_index).dues.get(payind).amount) {
+            Main.users.get(user_index).walletAmount -= Main.users.get(user_index).dues.get(payind).amount;
+            Main.users.get(user_index).dues.get(payind).duedBy.walletAmount += Main.users.get(user_index).dues
+                    .get(payind).amount;
+            Main.users.get(user_index).pays += String.format("Paid Rs.%d for %s expense on %s",
+                    Main.users.get(user_index).dues.get(payind).amount,
+                    Main.users.get(user_index).dues.get(payind).Name,
+                    Main.users.get(user_index).dues.get(payind).dateTime.toString());
+            return true;
+        }
+        return false;
     }
 
     private static void addExpense(int user_index) {
@@ -167,28 +215,19 @@ public class User {
         String details = Main.sc.nextLine();
         System.out.print("Enter Amount : ");
         Integer amount = Integer.parseInt(Main.sc.nextLine());
-        System.out.println("Select partners for this Expense");
+        System.out.println(">>>>>>>Select partners for this Expense<<<<<<");
         selectPartners(user_index, amount, name, details);
     }
 
     private static void selectPartners(int user_index, int amount, String name, String details) {
-        System.out.println("Select 1 if Only you");
-        System.out.println("Select 2 if all (including you)");
-        System.out.println("Select 3 if all (Excluding you)");
-        System.out.println("Select 4 for custom Selection");
-        System.out.println("Select 5 to cancel action");
+
+        System.out.println("Select 1 for Partner Selection");
+        System.out.println("Select 2 to cancel action");
 
         int n = Integer.parseInt(Main.sc.nextLine());
         if (n == 1) {
-            selfDue(user_index, amount, name);
-        } else if (n == 2) {
-            selfDue(user_index, amount, name);
-            dueforAll(user_index, amount, name, details);
-        } else if (n == 3) {
-            dueforAll(user_index, amount, name, details);
-        } else if (n == 4) {
             customDueallocate(user_index, amount, name, details);
-        } else if (n == 5) {
+        } else if (n == 2) {
             System.out.println("Action has been Dropped");
             System.out.println("Press any key to continue......");
             Main.sc.nextLine();
@@ -239,31 +278,6 @@ public class User {
             userPage(user_index);
         }
 
-    }
-
-    private static void dueforAll(int user_index, int amount, String name2, String details) {
-        amount = amount / Main.users.size();
-        for (int i = 0; i < Main.users.size(); i++) {
-            if (Main.users.get(i).equals(Main.users.get(user_index))) {
-                continue;
-            }
-            Main.users.get(i).dues
-                    .add(new Due(name2, details, amount, LocalDateTime.now(), Main.users.get(user_index)));
-        }
-        System.out.println("Successfully Due has been added for " + name2);
-        System.out.println("Press any key to continue......");
-        Main.sc.nextLine();
-        userPage(user_index);
-    }
-
-    static void selfDue(int user_index, int amount, String name) {
-        Main.users.get(user_index).walletAmount -= amount;
-        String det = String.format(" => Amount Rs.%d has been Paid for %s\n", amount, name);
-        System.out.print(det);
-        Main.users.get(user_index).pays += det;
-        System.out.println("Press any key to continue......");
-        Main.sc.nextLine();
-        userPage(user_index);
     }
 
     static void selfDueTwo(int user_index, int amount, String name) {
