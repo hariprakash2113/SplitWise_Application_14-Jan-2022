@@ -103,7 +103,7 @@ public class User {
                 addPartner(user_index);
                 break;
             case 3:
-                // viewOrRepay();
+                viewOrRepay(user_index);
                 break;
             case 4:
                 viewTransactions(user_index);
@@ -115,6 +115,12 @@ public class User {
                 changePassword(user_index);
                 break;
             case 7:
+                System.out.println("Logging You out Please Wait....");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    userPage(user_index);
+                }
                 login();
                 break;
             default:
@@ -123,6 +129,31 @@ public class User {
                 Main.sc.nextLine();
                 userPage(user_index);
         }
+    }
+
+    private static void viewOrRepay(int user_index) {
+        System.out.print("\033[H\033[2J");
+        System.out.println("-------Pending Dues--------");
+        for (int i = 0; i < Main.users.get(user_index).dues.size(); i++) {
+            System.out.println("Due "+(i+1));
+            System.out.println();
+            System.out.println("-> Name of the Expense : " + Main.users.get(user_index).dues.get(i).Name);
+
+            System.out.println("-> Detail of the Expense : " + Main.users.get(user_index).dues.get(i).details);
+
+            String dateAndTime = String.format("Date : %d / %d / %d Time : %d : %d",
+                    Main.users.get(user_index).dues.get(i).dateTime.getDayOfMonth(),
+                    Main.users.get(user_index).dues.get(i).dateTime.getMonthValue(),
+                    Main.users.get(user_index).dues.get(i).dateTime.getYear(),
+                    Main.users.get(user_index).dues.get(i).dateTime.getHour(),
+                    Main.users.get(user_index).dues.get(i).dateTime.getMinute());
+            System.out.println("-> Date of the Expense : " + dateAndTime);
+            System.out.println("Due Posted By : "+Main.users.get(user_index).dues.get(i).duedBy.Name);
+            System.out.println("Due Amount :"+Main.users.get(user_index).dues.get(i).amount);
+        }
+        System.out.println("Press any key to continue......");
+        Main.sc.nextLine();
+        userPage(user_index);
     }
 
     private static void addExpense(int user_index) {
@@ -190,7 +221,7 @@ public class User {
         } else {
             boolean flag = false;
             String[] cms = s.split(" ");
-            amount=amount/cms.length;
+            amount = amount / cms.length;
             for (int i = 0; i < cms.length; i++) {
                 int n = Integer.parseInt(cms[i]);
                 if (Main.users.get(n - 1).equals(Main.users.get(user_index))) {
@@ -201,11 +232,11 @@ public class User {
                 Main.users.get(n - 1).dues
                         .add(new Due(name2, details, amount, LocalDateTime.now(), Main.users.get(user_index)));
             }
-            if(flag)
+            if (flag)
                 System.out.println("Due has been added SuccessFully");
-                System.out.println("Press any key to continue......");
-                Main.sc.nextLine();
-                userPage(user_index);
+            System.out.println("Press any key to continue......");
+            Main.sc.nextLine();
+            userPage(user_index);
         }
 
     }
@@ -234,6 +265,7 @@ public class User {
         Main.sc.nextLine();
         userPage(user_index);
     }
+
     static void selfDueTwo(int user_index, int amount, String name) {
         Main.users.get(user_index).walletAmount -= amount;
         String det = String.format(" => Amount Rs.%d has been Paid for %s\n", amount, name);
