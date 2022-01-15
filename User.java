@@ -186,8 +186,9 @@ public class User {
             for (int j = 0; j < i; j++) {
                 Main.users.get(user_index).dues.remove(0);
             }
-
         }
+        System.out.println("Repayment Done");
+        userPage(user_index);
     }
 
     private static boolean pay(int user_index, int payind) {
@@ -195,7 +196,7 @@ public class User {
             Main.users.get(user_index).walletAmount -= Main.users.get(user_index).dues.get(payind).amount;
             Main.users.get(user_index).dues.get(payind).duedBy.walletAmount += Main.users.get(user_index).dues
                     .get(payind).amount;
-            Main.users.get(user_index).pays += String.format("Paid Rs.%d for %s expense on %s",
+            Main.users.get(user_index).pays += String.format("Paid Rs.%d for %s expense on %s\n",
                     Main.users.get(user_index).dues.get(payind).amount,
                     Main.users.get(user_index).dues.get(payind).Name,
                     Main.users.get(user_index).dues.get(payind).dateTime.toString());
@@ -241,6 +242,7 @@ public class User {
     }
 
     private static void customDueallocate(int user_index, int amount, String name2, String details) {
+        Main.users.get(user_index).walletAmount -= amount;
         System.out.println();
         for (int i = 0; i < Main.users.size(); i++) {
             if (Main.users.get(i).equals(Main.users.get(user_index))) {
@@ -281,7 +283,7 @@ public class User {
     }
 
     static void selfDueTwo(int user_index, int amount, String name) {
-        Main.users.get(user_index).walletAmount -= amount;
+        Main.users.get(user_index).walletAmount += amount;
         String det = String.format(" => Amount Rs.%d has been Paid for %s\n", amount, name);
         System.out.print(det);
         Main.users.get(user_index).pays += det;
