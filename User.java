@@ -196,7 +196,12 @@ public class User {
             Main.users.get(user_index).walletAmount -= Main.users.get(user_index).dues.get(payind).amount;
             Main.users.get(user_index).dues.get(payind).duedBy.walletAmount += Main.users.get(user_index).dues
                     .get(payind).amount;
-            Main.users.get(user_index).pays += String.format("Paid Rs.%d for %s expense on %s\n",
+            Main.users.get(user_index).pays += String.format("Paid Rs.%d for %s expense on done on %s\n",
+                    Main.users.get(user_index).dues.get(payind).amount,
+                    Main.users.get(user_index).dues.get(payind).Name,
+                    Main.users.get(user_index).dues.get(payind).dateTime.toString());
+            Main.users.get(user_index).dues.get(payind).duedBy.pays += String.format(
+                    "Received Rs.%d for %s expense on done on %s\n",
                     Main.users.get(user_index).dues.get(payind).amount,
                     Main.users.get(user_index).dues.get(payind).Name,
                     Main.users.get(user_index).dues.get(payind).dateTime.toString());
